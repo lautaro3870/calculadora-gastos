@@ -11,12 +11,13 @@ import {
   TextField,
 } from "@mui/material";
 import { ChangeEvent } from "react";
+import Swal from "sweetalert2";
+import { Box } from "@mui/system";
 
 const columns: GridColDef[] = [
-  { field: "id", headerName: "ID", width: 70 },
-  { field: "gasto", headerName: "Gasto", width: 160 },
-  { field: "categoria", headerName: "Categoria", width: 160 },
-  { field: "fecha", headerName: "Fecha", width: 200 },
+  { field: "gasto", headerName: "Gasto", width: 120 },
+  { field: "categoria", headerName: "Categoria", width: 140 },
+  { field: "fecha", headerName: "Fecha", width: 150 },
 ];
 
 const obtenerFecha = (): string => {
@@ -44,6 +45,8 @@ const getLocalItems = () => {
 export default function Calculadora() {
   const categorias: string[] = ["Super", "Otros", "Tren", "Bondi"];
   let suma: number = 0;
+
+  const totalAGastar = 300;
 
   const [total, setTotal] = useState<number>(0);
 
@@ -78,6 +81,13 @@ export default function Calculadora() {
 
   const calcular = () => {
     //console.log(gasto + " " + categoria);
+    if (gasto === "" || categoria === "") {
+      Swal.fire({
+        icon: "error",
+        title: "Ingrese los valores",
+      });
+      return;
+    }
     const objeto = {
       id: Math.floor(Math.random() * 1000),
       gasto: parseFloat(gasto),
@@ -94,7 +104,7 @@ export default function Calculadora() {
     <div>
       <br />
       <TextField
-        type="text"
+        type="number"
         size="small"
         id="gasto"
         label="Gasto"
@@ -105,43 +115,74 @@ export default function Calculadora() {
       <Select
         labelId="demo-simple-select-label"
         id="selectCategoria"
-        label="Age"
+        label="Categorias"
         size="small"
         value={categoria}
         onChange={handleChange}
       >
         {categorias.map((i) => {
           return (
-            <MenuItem key={i} value={i}>
+            <MenuItem selected key={i} value={i}>
               {i}
             </MenuItem>
           );
         })}
       </Select>
-      <Button onClick={calcular} variant="contained" style={{marginLeft:"20px"}}>
+      <Button
+        onClick={calcular}
+        variant="contained"
+        style={{ marginLeft: "5px" }}
+      >
         Ingresar
       </Button>
-      <Button variant="outlined" color="error"style={{marginLeft:"20px"}} onClick={() => {
-        localStorage.setItem("gastos", JSON.stringify([]));
-        setListado([])
-        setTotal(0);
-      }}>
+      <Button
+        variant="outlined"
+        color="error"
+        style={{ marginLeft: "10px" }}
+        onClick={() => {
+          Swal.fire({
+            title: "¿Limpiar lista?",
+            showDenyButton: true,
+            showConfirmButton: false,
+            showCancelButton: true,
+            denyButtonText: `Limpiar`,
+          }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isDenied) {
+              localStorage.setItem("gastos", JSON.stringify([]));
+              setListado([]);
+              setTotal(0);
+              Swal.fire("Lista limpiada", "", "info");
+            }
+          });
+        }}
+      >
         Limpiar
       </Button>
-      <label style={{ marginLeft: "20px" }}>Total: {total.toFixed(2)}</label>
+      <label style={{ marginLeft: "10px" }}>
+        Total:{" "}
+        {total > totalAGastar ? (
+          <p style={{ color: "red" }}>{total.toFixed(1)}</p>
+        ) : (
+          total.toFixed(1)
+        )}
+      </label>
+      <br />
+      <label>Total para gastar: {totalAGastar}</label>
       <br />
       <br />
-      <DataGrid
-        rows={listado}
-        columns={columns}
-        initialState={{
-          pagination: {
-            paginationModel: { page: 0, pageSize: 5 },
-          },
-        }}
-        pageSizeOptions={[5, 10]}
-        checkboxSelection
-      />
+      <Box sx={{ height: "100%", width: "100%" }}>
+        <DataGrid
+          rows={listado}
+          columns={columns}
+          initialState={{
+            pagination: {
+              paginationModel: { page: 0, pageSize: 10 },
+            },
+          }}
+          pageSizeOptions={[5, 10]}
+        />
+      </Box>
     </div>
   );
 }
