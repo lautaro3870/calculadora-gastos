@@ -79,6 +79,37 @@ export default function Calculadora() {
     sumar();
   }, [listado]);
 
+  const filtrar = async () => {
+    const { value: categoria } = await Swal.fire({
+      title: "Filtar",
+      input: "select",
+      inputOptions: {
+        //["Super", "Otros", "Tren", "Bondi"];
+        Super: "Super",
+        Otros: "Otros",
+        Tren: "Tren",
+        Bondi: "Bondi",
+      },
+      inputPlaceholder: "Categorias",
+      showDenyButton: true,
+      denyButtonText: `Limpiar`,
+    });
+
+    if (categoria) {
+      console.log(categoria);
+      let suma = 0;
+      const nuevoArreglo = listado.filter(
+        (i: any) => i.categoria === categoria
+      );
+      nuevoArreglo.map((i: any) => {
+        suma = suma + i.gasto;
+      });
+      Swal.fire("Subtotal: " + suma.toString())
+      //   console.log(nuevoArreglo);
+      //   setListado(nuevoArreglo);
+    }
+  };
+
   const calcular = () => {
     //console.log(gasto + " " + categoria);
     if (gasto === "" || categoria === "") {
@@ -131,6 +162,7 @@ export default function Calculadora() {
       <Button
         onClick={calcular}
         variant="contained"
+        size="small"
         style={{ marginLeft: "5px" }}
       >
         Ingresar
@@ -138,6 +170,7 @@ export default function Calculadora() {
       <Button
         variant="outlined"
         color="error"
+        size="small"
         style={{ marginLeft: "10px" }}
         onClick={() => {
           Swal.fire({
@@ -158,6 +191,14 @@ export default function Calculadora() {
         }}
       >
         Limpiar
+      </Button>
+      <Button
+        variant="outlined"
+        size="small"
+        style={{ marginLeft: "5px" }}
+        onClick={filtrar}
+      >
+        Filtrar
       </Button>
       <label style={{ marginLeft: "10px" }}>
         Total:{" "}
