@@ -13,6 +13,7 @@ import {
 import { ChangeEvent } from "react";
 import Swal from "sweetalert2";
 import { Box } from "@mui/system";
+import Barra from "./Barra";
 
 const columns: GridColDef[] = [
   { field: "gasto", headerName: "Gasto", width: 120 },
@@ -104,7 +105,7 @@ export default function Calculadora() {
       nuevoArreglo.map((i: any) => {
         suma = suma + i.gasto;
       });
-      Swal.fire("Subtotal: " + suma.toString())
+      Swal.fire("Subtotal: " + suma.toString());
       //   console.log(nuevoArreglo);
       //   setListado(nuevoArreglo);
     }
@@ -133,6 +134,7 @@ export default function Calculadora() {
 
   return (
     <div>
+      <Barra />
       <br />
       <TextField
         type="number"
