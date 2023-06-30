@@ -1,5 +1,11 @@
 import { MutableRefObject, useRef, useState, useEffect } from "react";
-import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  GridColDef,
+  GridRenderCellParams,
+  GridTreeNodeWithRender,
+  GridValueGetterParams,
+} from "@mui/x-data-grid";
 import {
   Button,
   FormControl,
@@ -14,12 +20,7 @@ import { ChangeEvent } from "react";
 import Swal from "sweetalert2";
 import { Box } from "@mui/system";
 import Barra from "./Barra";
-
-const columns: GridColDef[] = [
-  { field: "gasto", headerName: "Gasto", width: 120 },
-  { field: "categoria", headerName: "Categoria", width: 140 },
-  { field: "fecha", headerName: "Fecha", width: 150 },
-];
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const obtenerFecha = (): string => {
   const today = new Date();
@@ -56,6 +57,30 @@ export default function Calculadora() {
 
   const [listado, setListado] = useState(getLocalItems());
 
+  const columns: GridColDef[] = [
+    { field: "gasto", headerName: "Gasto", width: 120 },
+    { field: "categoria", headerName: "Categoria", width: 140 },
+    { field: "fecha", headerName: "Fecha", width: 150 },
+    {
+      field: "actions",
+      headerName: "Actions",
+      renderCell: (params) => {
+        const onClick = () => {
+          const id = params.api.getCellValue(params.id, "id");
+          //const listado = JSON.parse(localStorage.getItem("gastos") ?? "");
+          const nuevoArrelgo = listado.filter((i: any) => i.id !== id);
+          console.log(nuevoArrelgo);
+          setListado(nuevoArrelgo);
+        };
+        return (
+          <Button onClick={onClick} variant="outlined" color="error">
+            <DeleteIcon />
+          </Button>
+        );
+      },
+    },
+  ];
+
   const handleChange = (event: SelectChangeEvent) => {
     console.log(event.target.value);
     setCategoria(event.target.value);
@@ -80,6 +105,15 @@ export default function Calculadora() {
     sumar();
   }, [listado]);
 
+  const handleChangeCategoria = () => {
+    const categoria = document.getElementById(
+      "selectCategoria"
+    ) as HTMLInputElement | null;
+    if (categoria !== null) {
+      return categoria.value;
+    }
+  };
+
   const filtrar = async () => {
     const { value: categoria } = await Swal.fire({
       title: "Filtar",
@@ -96,6 +130,25 @@ export default function Calculadora() {
       denyButtonText: `Limpiar`,
     });
 
+    // const { value: formValues } = await Swal.fire({
+    //   title: "Multiple inputs",
+    //   html: `<select id="selectCategoria" onchange='handleChangeCategoria()'>
+    //         <option value="Super">Super</option>
+    //         <option value="Bondi">Bondi</option>
+    //         <option value="Tren">Tren</option>
+    //         <option value="Otros">Otros</option>
+    //     </select>`,
+    //   focusConfirm: false,
+    //   preConfirm: () => {
+    //     const a = handleChangeCategoria();
+    //     return [a]
+    //   },
+    // });
+
+    // if (formValues) {
+    //   alert(formValues);
+    // }
+
     if (categoria) {
       console.log(categoria);
       let suma = 0;
@@ -109,6 +162,29 @@ export default function Calculadora() {
       //   console.log(nuevoArreglo);
       //   setListado(nuevoArreglo);
     }
+
+    // const { value: fecha } = await Swal.fire({
+    //   title: "Filtar Fecha",
+    //   input: "select",
+    //   inputOptions: {
+    //     //["Super", "Otros", "Tren", "Bondi"];
+    //     Enero: 1,
+    //     Febrero: 2,
+    //     Marzo: 3,
+    //     Abril: 4,
+    //     Mayo: 5,
+    //     Junio: 6,
+    //     Julio: 7,
+    //     Agosto: 8,
+    //     Septiembre: 9,
+    //     Octubre: 10,
+    //     Noviembre: 11,
+    //     Diciembre: 12,
+    //   },
+    //   inputPlaceholder: "Fechas",
+    //   showDenyButton: true,
+    //   denyButtonText: `Limpiar`,
+    // });
   };
 
   const calcular = () => {
