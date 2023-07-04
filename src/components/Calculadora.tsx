@@ -23,6 +23,7 @@ import Barra from "./Barra";
 import DeleteIcon from "@mui/icons-material/Delete";
 import getLocalItems from '../funciones/GetLocalItems';
 import sumar from "../funciones/Sumar";
+import filtrar from "../funciones/Filtrar";
 
 const obtenerFecha = (): string => {
   const today = new Date();
@@ -96,37 +97,37 @@ export default function Calculadora() {
     setTotal(suma)
   }, [listado]);
 
-  const filtrar = async () => {
-    const { value: categoria } = await Swal.fire({
-      title: "Filtar",
-      input: "select",
-      inputOptions: {
-        Super: "Super",
-        Otros: "Otros",
-        Tren: "Tren",
-        Bondi: "Bondi",
-        Bar: "Bar",
-        Boludeces: "Boludeces"
-      },
-      inputPlaceholder: "Categorias",
-      showDenyButton: true,
-      denyButtonText: `Limpiar`,
-    });
+  // const filtrar = async () => {
+  //   const { value: categoria } = await Swal.fire({
+  //     title: "Filtar",
+  //     input: "select",
+  //     inputOptions: {
+  //       Super: "Super",
+  //       Otros: "Otros",
+  //       Tren: "Tren",
+  //       Bondi: "Bondi",
+  //       Bar: "Bar",
+  //       Boludeces: "Boludeces"
+  //     },
+  //     inputPlaceholder: "Categorias",
+  //     showDenyButton: true,
+  //     denyButtonText: `Limpiar`,
+  //   });
 
-    if (categoria) {
-      console.log(categoria);
-      let suma = 0;
-      const nuevoArreglo = listado.filter(
-        (i: any) => i.categoria === categoria
-      );
-      nuevoArreglo.map((i: any) => {
-        suma = suma + i.gasto;
-      });
-      Swal.fire("Subtotal: " + suma.toString());
-      //   console.log(nuevoArreglo);
-      //   setListado(nuevoArreglo);
-    }
-  };
+  //   if (categoria) {
+  //     console.log(categoria);
+  //     let suma = 0;
+  //     const nuevoArreglo = listado.filter(
+  //       (i: any) => i.categoria === categoria
+  //     );
+  //     nuevoArreglo.map((i: any) => {
+  //       suma = suma + i.gasto;
+  //     });
+  //     Swal.fire("Subtotal: " + suma.toString());
+  //     //   console.log(nuevoArreglo);
+  //     //   setListado(nuevoArreglo);
+  //   }
+  // };
 
   const calcular = () => {
     //console.log(gasto + " " + categoria);
