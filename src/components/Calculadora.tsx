@@ -104,6 +104,8 @@ export default function Calculadora() {
         Otros: "Otros",
         Tren: "Tren",
         Bondi: "Bondi",
+        Bar: "Bar",
+        Boludeces: "Boludeces"
       },
       inputPlaceholder: "Categorias",
       showDenyButton: true,
