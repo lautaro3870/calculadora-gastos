@@ -22,6 +22,7 @@ import { Box } from "@mui/system";
 import Barra from "./Barra";
 import DeleteIcon from "@mui/icons-material/Delete";
 import getLocalItems from '../funciones/GetLocalItems';
+import sumar from "../funciones/Sumar";
 
 const obtenerFecha = (): string => {
   const today = new Date();
@@ -36,7 +37,7 @@ const obtenerFecha = (): string => {
 
 export default function Calculadora() {
   const categorias: string[] = ["Super", "Tren", "Bondi", "Bar", "Boludeces", "Otros"];
-  let suma: number = 0;
+  //let suma: number = 0;
 
   const totalAGastar = 300;
   const [total, setTotal] = useState<number>(0);
@@ -80,18 +81,19 @@ export default function Calculadora() {
     setGasto(event.target.value);
   };
 
-  const sumar = () => {
-    console.log(listado);
-    listado.map((i: any) => {
-      suma = suma + i.gasto;
-    });
-    console.log(suma);
-    setTotal(suma);
-  };
+  // const sumar = () => {
+  //   console.log(listado);
+  //   listado.map((i: any) => {
+  //     suma = suma + i.gasto;
+  //   });
+  //   console.log(suma);
+  //   setTotal(suma);
+  // };
 
   useEffect(() => {
     localStorage.setItem("gastos", JSON.stringify(listado));
-    sumar();
+    const suma = sumar()
+    setTotal(suma)
   }, [listado]);
 
   const filtrar = async () => {
@@ -99,7 +101,6 @@ export default function Calculadora() {
       title: "Filtar",
       input: "select",
       inputOptions: {
-        //["Super", "Otros", "Tren", "Bondi"];
         Super: "Super",
         Otros: "Otros",
         Tren: "Tren",
