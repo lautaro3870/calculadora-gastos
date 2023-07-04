@@ -5,7 +5,7 @@ export default function Barra() {
     <>
       <Navbar bg="dark" variant="dark">
         <Container>
-          <Navbar.Brand href="https://prueba-react-vercel.vercel.app/super">TODO</Navbar.Brand>
+          <Navbar.Brand href={process.env.REACT_APP_URL}>TODO</Navbar.Brand>
         </Container>
       </Navbar>
     </>

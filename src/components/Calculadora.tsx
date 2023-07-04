@@ -21,6 +21,7 @@ import Swal from "sweetalert2";
 import { Box } from "@mui/system";
 import Barra from "./Barra";
 import DeleteIcon from "@mui/icons-material/Delete";
+import getLocalItems from '../funciones/GetLocalItems';
 
 const obtenerFecha = (): string => {
   const today = new Date();
@@ -33,23 +34,11 @@ const obtenerFecha = (): string => {
   return formattedDate;
 };
 
-const getLocalItems = () => {
-  let list = localStorage.getItem("gastos");
-  if (list === null) {
-    return [];
-  }
-  console.log(list);
-  if (list) {
-    return JSON.parse(localStorage.getItem("gastos") ?? "");
-  }
-};
-
 export default function Calculadora() {
-  const categorias: string[] = ["Super", "Otros", "Tren", "Bondi"];
+  const categorias: string[] = ["Super", "Tren", "Bondi", "Bar", "Boludeces", "Otros"];
   let suma: number = 0;
 
   const totalAGastar = 300;
-
   const [total, setTotal] = useState<number>(0);
 
   const [gasto, setGasto] = useState<string>("");
@@ -105,15 +94,6 @@ export default function Calculadora() {
     sumar();
   }, [listado]);
 
-  const handleChangeCategoria = () => {
-    const categoria = document.getElementById(
-      "selectCategoria"
-    ) as HTMLInputElement | null;
-    if (categoria !== null) {
-      return categoria.value;
-    }
-  };
-
   const filtrar = async () => {
     const { value: categoria } = await Swal.fire({
       title: "Filtar",
@@ -130,25 +110,6 @@ export default function Calculadora() {
       denyButtonText: `Limpiar`,
     });
 
-    // const { value: formValues } = await Swal.fire({
-    //   title: "Multiple inputs",
-    //   html: `<select id="selectCategoria" onchange='handleChangeCategoria()'>
-    //         <option value="Super">Super</option>
-    //         <option value="Bondi">Bondi</option>
-    //         <option value="Tren">Tren</option>
-    //         <option value="Otros">Otros</option>
-    //     </select>`,
-    //   focusConfirm: false,
-    //   preConfirm: () => {
-    //     const a = handleChangeCategoria();
-    //     return [a]
-    //   },
-    // });
-
-    // if (formValues) {
-    //   alert(formValues);
-    // }
-
     if (categoria) {
       console.log(categoria);
       let suma = 0;
@@ -162,29 +123,6 @@ export default function Calculadora() {
       //   console.log(nuevoArreglo);
       //   setListado(nuevoArreglo);
     }
-
-    // const { value: fecha } = await Swal.fire({
-    //   title: "Filtar Fecha",
-    //   input: "select",
-    //   inputOptions: {
-    //     //["Super", "Otros", "Tren", "Bondi"];
-    //     Enero: 1,
-    //     Febrero: 2,
-    //     Marzo: 3,
-    //     Abril: 4,
-    //     Mayo: 5,
-    //     Junio: 6,
-    //     Julio: 7,
-    //     Agosto: 8,
-    //     Septiembre: 9,
-    //     Octubre: 10,
-    //     Noviembre: 11,
-    //     Diciembre: 12,
-    //   },
-    //   inputPlaceholder: "Fechas",
-    //   showDenyButton: true,
-    //   denyButtonText: `Limpiar`,
-    // });
   };
 
   const calcular = () => {
