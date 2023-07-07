@@ -104,7 +104,7 @@ export default function CalculoReporte() {
         >
           Limpiar
         </Button>
-        <label style={{ marginLeft: "20px" }}>Subtotal: {subtotal}</label>
+        <label style={{ marginLeft: "20px" }}>Subtotal: {subtotal.toFixed(2)}</label>
       </Form>
       <br />
       <Box sx={{ height: "100%", width: "100%" }}>
