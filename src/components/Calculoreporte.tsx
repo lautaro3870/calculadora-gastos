@@ -1,12 +1,21 @@
-import { Box, MenuItem, Select, SelectChangeEvent } from "@mui/material";
+import {
+  Box,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  Button,
+} from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
 import getLocalItems from "../funciones/GetLocalItems";
 import { Form } from "react-bootstrap";
+import sumar from "../funciones/Sumar";
+import { Label } from "@mui/icons-material";
 
 export default function CalculoReporte() {
   const [mes, setMes] = useState<string>("");
   const [listado, setListado] = useState(getLocalItems());
+  const [subtotal, setSubTotal] = useState<number>(0);
 
   const columns: GridColDef[] = [
     { field: "gasto", headerName: "Gasto", width: 120 },
@@ -64,8 +73,9 @@ export default function CalculoReporte() {
       const month = parseInt(dateParts[1]);
       return month === valor; // Filtra los elementos cuyo mes sea 7 (julio)
     });
-    console.log(filteredList);
     setListado(filteredList);
+    const resultado = sumar(filteredList);
+    setSubTotal(resultado);
   };
 
   return (
@@ -84,6 +94,17 @@ export default function CalculoReporte() {
             </MenuItem>
           ))}
         </Select>
+        <Button
+          variant="outlined"
+          style={{ marginLeft: "20px" }}
+          color="error"
+          onClick={() => {
+            setListado(getLocalItems());
+          }}
+        >
+          Limpiar
+        </Button>
+        <label style={{ marginLeft: "20px" }}>Subtotal: {subtotal}</label>
       </Form>
       <br />
       <Box sx={{ height: "100%", width: "100%" }}>

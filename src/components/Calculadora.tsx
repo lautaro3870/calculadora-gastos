@@ -85,7 +85,7 @@ export default function Calculadora() {
   
   useEffect(() => {
     localStorage.setItem("gastos", JSON.stringify(listado));
-    const suma = sumar()
+    const suma = sumar(listado)
     setTotal(suma)
   }, [listado]);
 

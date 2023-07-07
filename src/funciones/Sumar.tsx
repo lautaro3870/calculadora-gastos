@@ -1,10 +1,10 @@
 import getLocalItems from "./GetLocalItems";
 
-const sumar = (): number => {
+const sumar = (items: any): number => {
     let suma = 0;
-    const listado = getLocalItems();
-    console.log(listado);
-    listado.map((i: any) => {
+    // const listado = getLocalItems();
+    // console.log(listado);
+    items.map((i: any) => {
       suma = suma + i.gasto;
     });
     console.log(suma);
