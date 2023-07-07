@@ -24,6 +24,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import getLocalItems from '../funciones/GetLocalItems';
 import sumar from "../funciones/Sumar";
 import filtrar from "../funciones/Filtrar";
+import Rutas from '../Rutas'
 
 const obtenerFecha = (): string => {
   const today = new Date();
@@ -81,53 +82,12 @@ export default function Calculadora() {
     console.log(event.target.value);
     setGasto(event.target.value);
   };
-
-  // const sumar = () => {
-  //   console.log(listado);
-  //   listado.map((i: any) => {
-  //     suma = suma + i.gasto;
-  //   });
-  //   console.log(suma);
-  //   setTotal(suma);
-  // };
-
+  
   useEffect(() => {
     localStorage.setItem("gastos", JSON.stringify(listado));
     const suma = sumar()
     setTotal(suma)
   }, [listado]);
-
-  // const filtrar = async () => {
-  //   const { value: categoria } = await Swal.fire({
-  //     title: "Filtar",
-  //     input: "select",
-  //     inputOptions: {
-  //       Super: "Super",
-  //       Otros: "Otros",
-  //       Tren: "Tren",
-  //       Bondi: "Bondi",
-  //       Bar: "Bar",
-  //       Boludeces: "Boludeces"
-  //     },
-  //     inputPlaceholder: "Categorias",
-  //     showDenyButton: true,
-  //     denyButtonText: `Limpiar`,
-  //   });
-
-  //   if (categoria) {
-  //     console.log(categoria);
-  //     let suma = 0;
-  //     const nuevoArreglo = listado.filter(
-  //       (i: any) => i.categoria === categoria
-  //     );
-  //     nuevoArreglo.map((i: any) => {
-  //       suma = suma + i.gasto;
-  //     });
-  //     Swal.fire("Subtotal: " + suma.toString());
-  //     //   console.log(nuevoArreglo);
-  //     //   setListado(nuevoArreglo);
-  //   }
-  // };
 
   const calcular = () => {
     //console.log(gasto + " " + categoria);
@@ -152,7 +112,6 @@ export default function Calculadora() {
 
   return (
     <div>
-      <Barra />
       <br />
       <TextField
         type="number"
