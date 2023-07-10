@@ -25,6 +25,7 @@ import getLocalItems from '../funciones/GetLocalItems';
 import sumar from "../funciones/Sumar";
 import filtrar from "../funciones/Filtrar";
 import Rutas from '../Rutas'
+import categorias from "../Categorias";
 
 const obtenerFecha = (): string => {
   const today = new Date();
@@ -38,7 +39,6 @@ const obtenerFecha = (): string => {
 };
 
 export default function Calculadora() {
-  const categorias: string[] = ["Super", "Tren", "Bondi", "Bar", "Boludeces", "Otros"];
   //let suma: number = 0;
 
   const totalAGastar = 300;
