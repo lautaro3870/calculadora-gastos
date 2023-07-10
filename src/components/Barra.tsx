@@ -9,6 +9,7 @@ export default function Barra() {
           <Nav className="me-auto">
             <Nav.Link href="/calculadora">Calculadora</Nav.Link>
             <Nav.Link href="/reporte">Reporte</Nav.Link>
+            <Nav.Link href="/grafico">Grafico</Nav.Link>
           </Nav>
         </Container>
       </Navbar>
