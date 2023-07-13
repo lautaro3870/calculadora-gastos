@@ -10,6 +10,7 @@ export default function Barra() {
             <Nav.Link href="/calculadora">Calculadora</Nav.Link>
             <Nav.Link href="/reporte">Reporte</Nav.Link>
             <Nav.Link href="/grafico">Grafico</Nav.Link>
+            <Nav.Link href="/graficoLinea">Grafico Linea</Nav.Link>
           </Nav>
         </Container>
       </Navbar>
