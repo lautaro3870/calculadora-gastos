@@ -23,11 +23,10 @@ ChartJS.register(
 );
 export default function GraficoLinea() {
   const [listado, setListado] = useState(getLocalItems());
-
-  let nuevoListado: number[] = [];
-
-  useEffect(() => {
-    //console.log(listado)
+  const [datos, setDatos] = useState<number[] | null>(null);
+  
+  const calcular = () => {
+    let nuevoListado: number[] = [];
     const nuevo = listado.reduce((acc: any, obj: any) => {
       var key = obj.fecha;
       if (!acc[key]) {
@@ -49,8 +48,14 @@ export default function GraficoLinea() {
         suma = suma + objeto.gasto;
       }
       nuevoListado.push(suma);
+      setDatos(nuevoListado);
       console.log(suma);
     }
+  };
+
+  useEffect(() => {
+    //console.log(listado)
+    calcular();
   }, []);
 
   const options = {
@@ -75,12 +80,16 @@ export default function GraficoLinea() {
     labels,
     datasets: [
       {
-        label: "Dataset 1",
-        data: nuevoListado,
+        label: "Gastos",
+        data: datos,
         borderColor: "rgb(255, 99, 132)",
         backgroundColor: "rgba(255, 99, 132, 0.5)",
       },
     ],
   };
-  return <Line options={options} data={data} />;
+  return (
+    <div>
+      <Line options={options} data={data} />
+    </div>
+  );
 }

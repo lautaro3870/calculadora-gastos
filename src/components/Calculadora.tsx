@@ -115,6 +115,7 @@ export default function Calculadora() {
       <br />
       <TextField
         type="number"
+        style={{width:"120px"}}
         size="small"
         id="gasto"
         label="Gasto"
