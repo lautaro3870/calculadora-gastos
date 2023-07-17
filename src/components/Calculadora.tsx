@@ -125,54 +125,48 @@ export default function Calculadora() {
     <div>
       <br />
       <Grid container spacing={1}>
-        <Grid item xs={6}>
-          <Item>
-            <TextField
-              type="number"
-              style={{ width: "120px" }}
-              size="small"
-              id="gasto"
-              label="Gasto"
-              value={gasto}
-              variant="outlined"
-              onChange={handleChangeGasto}
-            />
-          </Item>
+        <Grid item xs={4}>
+          <TextField
+            type="number"
+            style={{ width: "120px" }}
+            size="small"
+            id="gasto"
+            label="Gasto"
+            value={gasto}
+            variant="outlined"
+            onChange={handleChangeGasto}
+          />
+        </Grid>
+        <Grid item xs={5}>
+          <Select
+            labelId="demo-simple-select-label"
+            id="selectCategoria"
+            label="Categorias"
+            size="small"
+            value={categoria}
+            onChange={handleChange}
+          >
+            {categorias.map((i) => {
+              return (
+                <MenuItem selected key={i} value={i}>
+                  {i}
+                </MenuItem>
+              );
+            })}
+          </Select>
         </Grid>
         <Grid item xs={3}>
-          <Item>
-            <Select
-              labelId="demo-simple-select-label"
-              id="selectCategoria"
-              label="Categorias"
-              size="small"
-              value={categoria}
-              onChange={handleChange}
-            >
-              {categorias.map((i) => {
-                return (
-                  <MenuItem selected key={i} value={i}>
-                    {i}
-                  </MenuItem>
-                );
-              })}
-            </Select>
-          </Item>
-        </Grid>
-        <Grid item xs={3}>
-          <Item>
-            <Button
-              onClick={calcular}
-              variant="contained"
-              size="small"
-              style={{ marginLeft: "5px" }}
-            >
-              Ingresar
-            </Button>
-          </Item>
+          <Button
+            onClick={calcular}
+            variant="contained"
+            size="small"
+            style={{ marginLeft: "5px" }}
+          >
+            Ingresar
+          </Button>
         </Grid>
       </Grid>
-
+      <br />
       <Button
         variant="outlined"
         color="error"
@@ -207,7 +201,6 @@ export default function Calculadora() {
         Filtrar
       </Button>
       <label style={{ marginLeft: "10px" }}>
-        Total:{" "}
         {total > totalAGastar ? (
           <p style={{ color: "red" }}>{total.toFixed(1)}</p>
         ) : (
