@@ -10,21 +10,24 @@ import {
   Button,
   FormControl,
   FormGroup,
+  Grid,
   InputLabel,
   MenuItem,
+  Paper,
   Select,
   SelectChangeEvent,
   TextField,
+  styled,
 } from "@mui/material";
 import { ChangeEvent } from "react";
 import Swal from "sweetalert2";
 import { Box } from "@mui/system";
 import Barra from "./Barra";
 import DeleteIcon from "@mui/icons-material/Delete";
-import getLocalItems from '../funciones/GetLocalItems';
+import getLocalItems from "../funciones/GetLocalItems";
 import sumar from "../funciones/Sumar";
 import filtrar from "../funciones/Filtrar";
-import Rutas from '../Rutas'
+import Rutas from "../Rutas";
 import categorias from "../Categorias";
 
 const obtenerFecha = (): string => {
@@ -37,6 +40,14 @@ const obtenerFecha = (): string => {
   console.log(formattedDate);
   return formattedDate;
 };
+
+const Item = styled(Paper)(({ theme }: any) => ({
+  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: "center",
+  color: theme.palette.text.secondary,
+}));
 
 export default function Calculadora() {
   //let suma: number = 0;
@@ -82,11 +93,11 @@ export default function Calculadora() {
     console.log(event.target.value);
     setGasto(event.target.value);
   };
-  
+
   useEffect(() => {
     localStorage.setItem("gastos", JSON.stringify(listado));
-    const suma = sumar(listado)
-    setTotal(suma)
+    const suma = sumar(listado);
+    setTotal(suma);
   }, [listado]);
 
   const calcular = () => {
@@ -113,40 +124,55 @@ export default function Calculadora() {
   return (
     <div>
       <br />
-      <TextField
-        type="number"
-        style={{width:"120px"}}
-        size="small"
-        id="gasto"
-        label="Gasto"
-        value={gasto}
-        variant="outlined"
-        onChange={handleChangeGasto}
-      />
-      <Select
-        labelId="demo-simple-select-label"
-        id="selectCategoria"
-        label="Categorias"
-        size="small"
-        value={categoria}
-        onChange={handleChange}
-      >
-        {categorias.map((i) => {
-          return (
-            <MenuItem selected key={i} value={i}>
-              {i}
-            </MenuItem>
-          );
-        })}
-      </Select>
-      <Button
-        onClick={calcular}
-        variant="contained"
-        size="small"
-        style={{ marginLeft: "5px" }}
-      >
-        Ingresar
-      </Button>
+      <Grid container spacing={1}>
+        <Grid item xs={6}>
+          <Item>
+            <TextField
+              type="number"
+              style={{ width: "120px" }}
+              size="small"
+              id="gasto"
+              label="Gasto"
+              value={gasto}
+              variant="outlined"
+              onChange={handleChangeGasto}
+            />
+          </Item>
+        </Grid>
+        <Grid item xs={3}>
+          <Item>
+            <Select
+              labelId="demo-simple-select-label"
+              id="selectCategoria"
+              label="Categorias"
+              size="small"
+              value={categoria}
+              onChange={handleChange}
+            >
+              {categorias.map((i) => {
+                return (
+                  <MenuItem selected key={i} value={i}>
+                    {i}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </Item>
+        </Grid>
+        <Grid item xs={3}>
+          <Item>
+            <Button
+              onClick={calcular}
+              variant="contained"
+              size="small"
+              style={{ marginLeft: "5px" }}
+            >
+              Ingresar
+            </Button>
+          </Item>
+        </Grid>
+      </Grid>
+
       <Button
         variant="outlined"
         color="error"
