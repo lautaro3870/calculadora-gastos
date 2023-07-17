@@ -22,6 +22,32 @@ ChartJS.register(
 
 export default function Grafico() {
   const [listado, setListado] = useState(getLocalItems());
+  const [reporte, setReporte] = useState<number[] | null>([]);
+
+  const obtenerGrafico = () => {
+    let nuevoListado = [];
+    const nuevo = listado.reduce((acc: any, obj: any) => {
+      var key = obj.categoria;
+      if (!acc[key]) {
+        acc[key] = [];
+      }
+      acc[key].push(obj);
+      return acc;
+    }, {});
+
+    for (const key in nuevo) {
+      const objetos = nuevo[key];
+
+      let suma = 0;
+      for (const objeto of objetos) {
+        suma = suma + objeto.gasto;
+      }
+
+      nuevoListado.push(suma);
+    }
+    setReporte(nuevoListado);
+    console.log(nuevoListado)
+  };
 
   const options = {
     responsive: true,
@@ -36,14 +62,15 @@ export default function Grafico() {
     },
   };
 
-  const labels = ["Super", "Boludeces", "Tren", "Bondi", "Bar", "Otros"];
+
+  const labels = ["Boludeces", "Bondi", "Super", "Bar", "Otros"];
 
   const data = {
     labels,
     datasets: [
       {
         label: "Gastos",
-        data: listado.map((i: any) => i.gasto),
+        data: reporte,
         backgroundColor: "rgba(255, 99, 132, 0.5)",
       },
     ],
@@ -51,39 +78,8 @@ export default function Grafico() {
 
   useEffect(() => {
     console.log(listado);
-    let cs = 0;
-    let cb = 0;
-    let cBondi = 0;
-
-    let final: number[] = []
-
-    listado.map((i: any) => {
-      switch (i.categoria) {
-        case "Super":
-          cs++;
-          break;
-        case "Boludeces":
-          cb++;
-          break;
-        case "Bondi":
-          cBondi++;
-          break;
-      }
-    });
-
-    final.push(cs, cb, cBondi);
-    console.log(final)
-
-    // const nuevo = listado.reduce((acc: any, obj: any) => {
-    //   var key = obj.categoria;
-    //   if (!acc[key]) {
-    //     acc[key] = [];
-    //   }
-    //   acc[key].push(obj);
-    //   return acc;
-    // }, {});
-
-    // console.log(nuevo)
+    
+    obtenerGrafico()
   }, []);
 
   return (
