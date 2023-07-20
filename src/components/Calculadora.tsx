@@ -128,7 +128,7 @@ export default function Calculadora() {
       <br />
       <Stack
         direction="row"
-        spacing={{ xs: 2, sm: 2, md: 4 }}
+        spacing={{ xs: 1, sm: 2, md: 4 }}
         style={{
           display: "flex",
           justifyContent: "center",
