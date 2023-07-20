@@ -16,6 +16,7 @@ import {
   Paper,
   Select,
   SelectChangeEvent,
+  Stack,
   TextField,
   styled,
 } from "@mui/material";
@@ -29,6 +30,7 @@ import sumar from "../funciones/Sumar";
 import filtrar from "../funciones/Filtrar";
 import Rutas from "../Rutas";
 import categorias from "../Categorias";
+import { Col, Container, Row } from "react-bootstrap";
 
 const obtenerFecha = (): string => {
   const today = new Date();
@@ -124,8 +126,16 @@ export default function Calculadora() {
   return (
     <div>
       <br />
-      <Grid container spacing={1}>
-        <Grid item xs={4}>
+      <Stack
+        direction="row"
+        spacing={{ xs: 2, sm: 2, md: 4 }}
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Item>
           <TextField
             type="number"
             style={{ width: "120px" }}
@@ -136,8 +146,8 @@ export default function Calculadora() {
             variant="outlined"
             onChange={handleChangeGasto}
           />
-        </Grid>
-        <Grid item xs={5}>
+        </Item>
+        <Item>
           <Select
             labelId="demo-simple-select-label"
             id="selectCategoria"
@@ -154,18 +164,18 @@ export default function Calculadora() {
               );
             })}
           </Select>
-        </Grid>
-        <Grid item xs={3}>
+        </Item>
+        <Item>
           <Button
             onClick={calcular}
             variant="contained"
-            size="small"
+            size="medium"
             style={{ marginLeft: "5px" }}
           >
             Ingresar
           </Button>
-        </Grid>
-      </Grid>
+        </Item>
+      </Stack>
       <br />
       <Button
         variant="outlined"
@@ -211,7 +221,11 @@ export default function Calculadora() {
       <label>Total para gastar: {totalAGastar}</label>
       <br />
       <br />
-      <Box sx={{ height: "100%", width: "100%" }}>
+      <Box style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}>
         <DataGrid
           rows={listado}
           columns={columns}
