@@ -3,7 +3,7 @@ const getLocalItems = () => {
   if (list === null) {
     return [];
   }
-  console.log(list);
+  
   if (list) {
     return JSON.parse(localStorage.getItem("gastos") ?? "");
   }

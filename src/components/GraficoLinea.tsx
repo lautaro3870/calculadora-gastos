@@ -119,7 +119,7 @@ export default function GraficoLinea() {
   }
 
   const year = new Date().getFullYear();
-  const month = new Date().getMonth(); // July
+  const month = new Date().getMonth();
   const datesOfMonth = getDatesOfMonth(year, month);
 
   // const labels = [

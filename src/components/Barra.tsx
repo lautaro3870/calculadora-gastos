@@ -27,6 +27,7 @@ export default function Barra() {
               <Nav.Link href="/reporte">Reporte</Nav.Link>
               <Nav.Link href="/grafico">Grafico</Nav.Link>
               <Nav.Link href="/graficoLinea">Grafico Linea</Nav.Link>
+              <Nav.Link href="/reporteMensual">Reporte Mensual</Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Container>
