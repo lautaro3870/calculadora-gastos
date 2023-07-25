@@ -148,6 +148,34 @@ export default function GraficoLinea() {
     }
   }, [chartData]);
 
+  const options = {
+    type: "line",
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "top" as const,
+      },
+      title: {
+        display: true,
+        text: "Gastos por Día",
+      },
+    },
+    // scales: {
+    //   x: {
+    //     type: "time",
+    //     time: {
+    //       unit: "day",
+    //     },
+    //     ticks: {
+    //       source: "labels",
+    //     },
+    //   },
+    //   y: {
+    //     beginAtZero: true,
+    //   },
+    // },
+  };
+
   function convertirFecha(fecha: any) {
     const partes = fecha.split("/"); // Separar la fecha en día, mes y año
     const dia = partes[0];
@@ -169,8 +197,8 @@ export default function GraficoLinea() {
 
   return (
     <div>
-      {/* <Line options={options} data={data} /> */}
-      <canvas id="lineChart" width="400" height="200"></canvas>
+      <Line options={options} data={chartData} />
+      {/* <canvas id="lineChart" width="400" height="200"></canvas> */}
     </div>
   );
 }
