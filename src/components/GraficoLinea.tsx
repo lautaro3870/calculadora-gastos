@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Chart as ChartJS,
   TimeScale,
@@ -9,6 +9,7 @@ import {
   Title,
   Tooltip,
   Legend,
+  ChartData,
 } from "chart.js";
 import "chartjs-adapter-date-fns";
 import { Line } from "react-chartjs-2";
@@ -26,9 +27,36 @@ ChartJS.register(
 );
 export default function GraficoLinea() {
   const [listado, setListado] = useState(getLocalItems());
-  const [datos, setDatos] = useState<{ fecha: any; valor: number; }[]>([]);
+  const [datos, setDatos] = useState<{ fecha: any; valor: any }[]>([]);
 
-  const calcular = () => {
+  const [chartData, setChartData] = useState<ChartData<"line", any, string>>({
+    // Set initial data here or provide data based on your requirements
+    labels: [],
+    datasets: [],
+  });
+
+  const generateChartData = () => {
+    // Obtén la fecha actual
+    const today = new Date();
+
+    // Obtén el primer día del mes actual
+    const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+
+    // Obtén el último día del mes actual
+    const lastDayOfMonth = new Date(
+      today.getFullYear(),
+      today.getMonth() + 1,
+      0
+    );
+
+    // Crea un array con todas las fechas del mes actual
+    const datesOfMonth = [];
+    let currentDate = firstDayOfMonth;
+    while (currentDate <= lastDayOfMonth) {
+      datesOfMonth.push(new Date(currentDate));
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+
     let nuevoListado = [];
     const nuevo = listado.reduce((acc: any, obj: any) => {
       var key = obj.fecha;
@@ -39,110 +67,113 @@ export default function GraficoLinea() {
       return acc;
     }, {});
 
-    console.log(nuevo["01/03/2023"]);
-
     for (const key in nuevo) {
       const objetos = nuevo[key];
-
+      const fecha = convertirFecha(key);
       console.log(objetos);
 
       let suma = 0;
       for (const objeto of objetos) {
         suma = suma + objeto.gasto;
       }
-
-      const nuevoObjeto = {
-        fecha: objetos[0].fecha,
-        valor: suma
-      }
-
-      nuevoListado.push(nuevoObjeto);
+      const objeto = {
+        valor: suma.toFixed(1),
+        fecha: fecha,
+      };
+      nuevoListado.push(objeto);
       setDatos(nuevoListado);
       console.log(suma);
     }
+
+    // Genera datos de ejemplo (puedes reemplazarlo con tus propios datos)
+    // const data = datesOfMonth.map((date) => Math.floor(Math.random() * 100));
+
+    const labels = nuevoListado.map((item) => item.fecha);
+    const values = nuevoListado.map((item) => item.valor);
+
+    // Crea el objeto de datos para el gráfico
+    const chartData = {
+      labels: labels,
+      datasets: [
+        {
+          label: "Datos del mes",
+          data: values,
+          borderColor: "rgba(75, 192, 192, 1)",
+          backgroundColor: "rgba(75, 192, 192, 0.2)",
+          fill: true,
+        },
+      ],
+    };
+
+    setChartData(chartData);
   };
 
   useEffect(() => {
-    //console.log(listado)
-    calcular();
+    generateChartData();
   }, []);
 
-  const options = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: "top" as const,
-      },
-      title: {
-        display: true,
-        text: "Gastos por Día",
-      },
-    },
-    // scales: {
-    //   x: {
-    //     adapters: {
-    //       type: "time",
-    //       distribution: "linear",
-    //       time: {
-    //         parser: "yyyy-MM-dd",
-    //         unit: "month"
-    //       },
-    //       title: {
-    //         display: true,
-    //         text: "Date"
-    //       }
-    //     }
-    //   }
-    // }
-    
-  };
+  const chartRef = useRef<ChartJS | null>(null);
 
-  function getDatesOfMonth(year: any, month: any) {
-    const daysInMonth = new Date(year, month, 0).getDate();
-    const datesArray = [];
-
-    for (let day = 1; day <= daysInMonth; day++) {
-      const date = new Date(year, month - 1, day);
-      const formattedDate = formatDate(date);
-      datesArray.push(formattedDate);
+  useEffect(() => {
+    // Crear el gráfico una vez que el componente esté montado
+    const canvas = document.getElementById(
+      "lineChart"
+    ) as HTMLCanvasElement | null;
+    if (canvas) {
+      if (chartRef.current) {
+        // If a previous chart instance exists, destroy it
+        chartRef.current.destroy();
+      }
+      const ctx = canvas.getContext("2d");
+      if (ctx) {
+        chartRef.current = new ChartJS(ctx, {
+          type: "line",
+          data: chartData,
+          options: {
+            responsive: true,
+            scales: {
+              x: {
+                type: "time",
+                time: {
+                  unit: "day",
+                },
+                ticks: {
+                  source: "labels",
+                },
+              },
+              y: {
+                beginAtZero: true,
+              },
+            },
+          },
+        });
+      }
     }
+  }, [chartData]);
 
-    return datesArray;
+  function convertirFecha(fecha: any) {
+    const partes = fecha.split("/"); // Separar la fecha en día, mes y año
+    const dia = partes[0];
+    const mes = partes[1] - 1; // Restamos 1 al mes para ajustar al formato de Date() (0-11)
+    const anio = partes[2];
+
+    const nuevaFecha = new Date(anio, mes, dia); // Crear nueva fecha con el formato deseado
+
+    // Obtener año, mes y día de la nueva fecha y formatear en yyyy-mm-dd
+    const anioFormateado = nuevaFecha.getFullYear();
+    const mesFormateado = (nuevaFecha.getMonth() + 1)
+      .toString()
+      .padStart(2, "0");
+    const diaFormateado = nuevaFecha.getDate().toString().padStart(2, "0");
+
+    const fechaFormateada = `${anioFormateado}-${mesFormateado}-${diaFormateado}`;
+    return fechaFormateada;
   }
 
-  function formatDate(date: any) {
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const year = date.getFullYear();
-
-    return `${day}/${month}`;
-  }
-
-  const year = new Date().getFullYear();
-  const month = new Date().getMonth();
-  const datesOfMonth = getDatesOfMonth(year, month);
-
-  // const labels = [
-  //   1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
-  //   22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
-  // ];
-
-  const labels = datesOfMonth;
-
-  const data = {
-    labels,
-    datasets: [
-      {
-        label: "Gastos",
-        data: datos.map((i: any) => i.valor),
-        borderColor: "rgb(255, 99, 132)",
-        backgroundColor: "rgba(255, 99, 132, 0.5)",
-      },
-    ],
-  };
   return (
     <div>
-      <Line options={options} data={data} />
+      {/* <Line options={options} data={data} /> */}
+      <canvas id="lineChart" width="400" height="200"></canvas>
     </div>
   );
 }
