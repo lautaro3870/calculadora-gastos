@@ -36,13 +36,10 @@ export default function GraficoLinea() {
   });
 
   const generateChartData = () => {
-    // Obtén la fecha actual
     const today = new Date();
 
-    // Obtén el primer día del mes actual
     const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
 
-    // Obtén el último día del mes actual
     const lastDayOfMonth = new Date(
       today.getFullYear(),
       today.getMonth() + 1,
