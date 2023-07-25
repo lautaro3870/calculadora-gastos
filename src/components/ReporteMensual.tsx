@@ -50,7 +50,29 @@ export default function ReporteMensual() {
     return suma;
   }
 
-  // Llamada a la función para obtener la suma de la propiedad 'prop'
+  function sumarGastosPorCategoria(objeto: any) {
+    const sumasPorCategoria: any = [];
+
+    for (const categoria in objeto) {
+      if (
+        objeto.hasOwnProperty(categoria) &&
+        Array.isArray(objeto[categoria])
+      ) {
+        const sumaCategoria = objeto[categoria].reduce(
+          (total: any, item: any) => total + item.gasto,
+          0
+        );
+        const objetoRetorno: any = {
+          valor: sumaCategoria,
+          categoria: categoria,
+        };
+        sumasPorCategoria.push(objetoRetorno);
+        //sumasPorCategoria[categoria] = sumaCategoria;
+      }
+    }
+
+    return sumasPorCategoria;
+  }
 
   const reporte = () => {
     let listadoFinal = [];
@@ -68,7 +90,6 @@ export default function ReporteMensual() {
       return acc;
     }, {});
 
-    console.log(nuevo);
     for (const key in nuevo) {
       const objetos = nuevo[key];
       const final = objetos.reduce((acc: any, obj: any) => {
@@ -80,18 +101,26 @@ export default function ReporteMensual() {
         return acc;
       }, {});
 
-      console.log(final);
       const sumaGastos = sumarGastos(final);
-      console.log(sumaGastos);
+      const sumasGastosPorCategoria = sumarGastosPorCategoria(final);
 
-      const mes = key
-      const objetoFinal = {
+      const mes = key;
+      const objetoDestino: any = {
         id: Math.floor(Math.random() * 1000),
+        Super: 0,
+        Bondi: 0,
+        Otros: 0,
+        Tren: 0,
+        Bar: 0,
+        Boludeces: 0,
         mes: mes,
-        total: sumaGastos,
+        total: sumaGastos.toFixed(1),
       };
-
-      listadoFinal.push(objetoFinal);
+      for (const key in sumasGastosPorCategoria) {
+        const valor = sumasGastosPorCategoria[key];
+        objetoDestino[valor.categoria] += valor.valor;
+      }
+      listadoFinal.push(objetoDestino);
       setDatos(listadoFinal);
     }
   };
