@@ -139,9 +139,9 @@ export default function ReporteMensual() {
     }
   };
 
-  useEffect(() => {
-    localStorage.setItem("reporteMensual", JSON.stringify(datos));
-  }, []);
+  // useEffect(() => {
+  //   localStorage.setItem("reporteMensual", JSON.stringify(datos));
+  // }, []);
 
   return (
     <div>
@@ -163,7 +163,7 @@ export default function ReporteMensual() {
             // const objeto = reporte();
             // nueva.push(objeto)
             // setDatos(nueva);
-            // localStorage.setItem("reporteMensual", JSON.stringify(datos));
+            localStorage.setItem("reporteMensual", JSON.stringify(datos));
             Swal.fire({
               icon: "success",
               title: "Guardado",
