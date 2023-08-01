@@ -1,11 +1,23 @@
-import { Box } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import React, { useState, useEffect, SetStateAction } from "react";
 import getLocalItems from "../funciones/GetLocalItems";
+import Swal from "sweetalert2";
+
+const getReporteMensual = () => {
+  let list = localStorage.getItem("reporteMensual");
+  if (list === null) {
+    return [];
+  }
+
+  if (list) {
+    return JSON.parse(localStorage.getItem("reporteMensual") ?? "");
+  }
+};
 
 export default function ReporteMensual() {
   const [listado, setListado] = useState(getLocalItems());
-  const [datos, setDatos] = useState<{ mes: any; total: number }[]>([]);
+  const [datos, setDatos] = useState<any[]>(getReporteMensual());
 
   const columns: GridColDef[] = [
     { field: "Super", headerName: "Super", width: 140 },
@@ -121,17 +133,51 @@ export default function ReporteMensual() {
         objetoDestino[valor.categoria] += valor.valor;
       }
       listadoFinal.push(objetoDestino);
+      //localStorage.setItem("reporteMensual", JSON.stringify(listadoFinal));
       setDatos(listadoFinal);
+      //return objetoDestino;
     }
   };
 
   useEffect(() => {
-    reporte();
+    localStorage.setItem("reporteMensual", JSON.stringify(datos));
   }, []);
 
   return (
-    <div style={{ display: "flex", placeItems: "center" }}>
+    <div>
+      <br />
+      <Stack
+        direction="row"
+        spacing={{ xs: 1, sm: 2, md: 4 }}
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <button
+          onClick={() => {
+            //reporte()
+            console.log(datos);
+            // let nueva: any[] = []
+            // const objeto = reporte();
+            // nueva.push(objeto)
+            // setDatos(nueva);
+            // localStorage.setItem("reporteMensual", JSON.stringify(datos));
+            Swal.fire({
+              icon: "success",
+              title: "Guardado",
+              text: "Lista guardada",
+            });
+          }}
+          className="btn btn-primary"
+        >
+          Guardar
+        </button>
+      </Stack>
       <Box>
+        <br />
+        <br />
         <DataGrid
           rows={datos}
           columns={columns}
