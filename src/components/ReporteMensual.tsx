@@ -133,8 +133,8 @@ export default function ReporteMensual() {
         objetoDestino[valor.categoria] += valor.valor;
       }
       listadoFinal.push(objetoDestino);
-      //localStorage.setItem("reporteMensual", JSON.stringify(listadoFinal));
       setDatos(listadoFinal);
+      localStorage.setItem("reporteMensual", JSON.stringify(listadoFinal));
       //return objetoDestino;
     }
   };
@@ -163,7 +163,8 @@ export default function ReporteMensual() {
             // const objeto = reporte();
             // nueva.push(objeto)
             // setDatos(nueva);
-            localStorage.setItem("reporteMensual", JSON.stringify(datos));
+            reporte()
+            //localStorage.setItem("reporteMensual", JSON.stringify(datos));
             Swal.fire({
               icon: "success",
               title: "Guardado",
