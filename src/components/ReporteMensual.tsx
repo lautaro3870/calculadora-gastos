@@ -133,15 +133,17 @@ export default function ReporteMensual() {
         objetoDestino[valor.categoria] += valor.valor;
       }
       listadoFinal.push(objetoDestino);
+
       setDatos(listadoFinal);
-      localStorage.setItem("reporteMensual", JSON.stringify(listadoFinal));
+      console.log(datos);
+
       //return objetoDestino;
     }
   };
 
-  // useEffect(() => {
-  //   localStorage.setItem("reporteMensual", JSON.stringify(datos));
-  // }, []);
+  useEffect(() => {
+    console.log(datos);
+  }, [datos]);
 
   return (
     <div>
@@ -163,7 +165,7 @@ export default function ReporteMensual() {
             // const objeto = reporte();
             // nueva.push(objeto)
             // setDatos(nueva);
-            reporte()
+            reporte();
             //localStorage.setItem("reporteMensual", JSON.stringify(datos));
             Swal.fire({
               icon: "success",

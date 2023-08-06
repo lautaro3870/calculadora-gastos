@@ -115,7 +115,7 @@ export default function Calculadora() {
       id: Math.floor(Math.random() * 1000),
       gasto: parseFloat(gasto),
       categoria: categoria,
-      fecha: "01/08/2023"
+      fecha: obtenerFecha()
     };
 
     console.log(objeto);
