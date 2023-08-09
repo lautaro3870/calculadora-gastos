@@ -87,7 +87,7 @@ export default function ReporteMensual() {
   }
 
   const reporte = () => {
-    let listadoFinal = [];
+    let listadoFinal = JSON.parse(localStorage.getItem("reporteMensual") ?? "");
     const nuevo = listado.reduce((acc: any, obj: any) => {
       const fechaString = obj.fecha;
       const fecha = new Date(fechaString.split("/").reverse().join("/"));
@@ -132,9 +132,11 @@ export default function ReporteMensual() {
         const valor = sumasGastosPorCategoria[key];
         objetoDestino[valor.categoria] += valor.valor;
       }
-      listadoFinal.push(objetoDestino);
+      if (listadoFinal !== null){
+        listadoFinal.push(objetoDestino);
+        setDatos(listadoFinal);
+      }
 
-      setDatos(listadoFinal);
       console.log(datos);
 
       //return objetoDestino;
@@ -143,6 +145,7 @@ export default function ReporteMensual() {
 
   useEffect(() => {
     console.log(datos);
+    localStorage.setItem("reporteMensual", JSON.stringify(datos));
   }, [datos]);
 
   return (
@@ -166,7 +169,7 @@ export default function ReporteMensual() {
             // nueva.push(objeto)
             // setDatos(nueva);
             reporte();
-            //localStorage.setItem("reporteMensual", JSON.stringify(datos));
+            
             Swal.fire({
               icon: "success",
               title: "Guardado",
