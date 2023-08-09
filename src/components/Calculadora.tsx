@@ -54,7 +54,7 @@ const Item = styled(Paper)(({ theme }: any) => ({
 export default function Calculadora() {
   //let suma: number = 0;
 
-  const totalAGastar = 300;
+  const totalAGastar = 400;
   const [total, setTotal] = useState<number>(0);
 
   const [gasto, setGasto] = useState<string>("");

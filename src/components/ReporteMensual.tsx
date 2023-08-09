@@ -1,8 +1,9 @@
-import { Box, Stack } from "@mui/material";
+import { Box, Stack, Button } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import React, { useState, useEffect, SetStateAction } from "react";
 import getLocalItems from "../funciones/GetLocalItems";
 import Swal from "sweetalert2";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const getReporteMensual = () => {
   let list = localStorage.getItem("reporteMensual");
@@ -28,6 +29,24 @@ export default function ReporteMensual() {
     { field: "Otros", headerName: "Otros", width: 120 },
     { field: "mes", headerName: "Mes", width: 150 },
     { field: "total", headerName: "Total", width: 150 },
+    {
+      field: "actions",
+      headerName: "Actions",
+      renderCell: (params) => {
+        const onClick = () => {
+          const id = params.api.getCellValue(params.id, "id");
+          //const listado = JSON.parse(localStorage.getItem("gastos") ?? "");
+          const nuevoArrelgo = datos.filter((i: any) => i.id !== id);
+          console.log(nuevoArrelgo);
+          setDatos(nuevoArrelgo);
+        };
+        return (
+          <Button onClick={onClick} variant="outlined" color="error">
+            <DeleteIcon />
+          </Button>
+        );
+      },
+    },
   ];
 
   function obtenerNombreMes(indiceMes: any) {
