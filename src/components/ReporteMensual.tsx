@@ -149,6 +149,7 @@ export default function ReporteMensual() {
       };
       for (const key in sumasGastosPorCategoria) {
         const valor = sumasGastosPorCategoria[key];
+        
         objetoDestino[valor.categoria] += valor.valor;
       }
       if (listadoFinal !== null){

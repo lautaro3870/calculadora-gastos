@@ -3,6 +3,7 @@ import {
   DataGrid,
   GridColDef,
   GridRenderCellParams,
+  GridSortModel,
   GridTreeNodeWithRender,
   GridValueGetterParams,
 } from "@mui/x-data-grid";
@@ -115,13 +116,20 @@ export default function Calculadora() {
       id: Math.floor(Math.random() * 1000),
       gasto: parseFloat(gasto),
       categoria: categoria,
-      fecha: obtenerFecha()
+      fecha: obtenerFecha(),
     };
 
     console.log(objeto);
     setListado((oldList: any[]) => [...oldList, objeto]);
     setGasto("");
   };
+
+  const [sortModel, setSortModel] = useState<GridSortModel>([
+    {
+      field: "fecha",
+      sort: "desc",
+    },
+  ]);
 
   return (
     <div>
@@ -221,14 +229,17 @@ export default function Calculadora() {
       <label>Total para gastar: {totalAGastar}</label>
       <br />
       <br />
-      <Box style={{
+      <Box
+        style={{
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-        }}>
+        }}
+      >
         <DataGrid
           rows={listado}
           columns={columns}
+          sortModel={sortModel}
           initialState={{
             pagination: {
               paginationModel: { page: 0, pageSize: 30 },
