@@ -7,7 +7,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 
 const client = new ApolloClient({
-  uri: "http://localhost:3000/graphql/",
+  uri: "https://calculador-gastos-nest-6zw2-dev.fl0.io/graphql",
   cache: new InMemoryCache(),
 });
 
