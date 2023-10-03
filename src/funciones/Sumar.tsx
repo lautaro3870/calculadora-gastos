@@ -5,7 +5,7 @@ const sumar = (items: any): number => {
     // const listado = getLocalItems();
     // console.log(listado);
     items.map((i: any) => {
-      suma = suma + i.gasto;
+      suma = suma + i.monto;
     });
     console.log(suma);
     return suma

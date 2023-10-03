@@ -1,2 +1,2 @@
-const categorias: string[] = ["Super", "Tren", "Bondi", "Bar", "Boludeces", "Otros"];
+const categorias: string[] = ["Super", "Metro", "Bondi", "Bar", "Boludeces", "Ropa", "Café", "Otros"];
 export default categorias;
