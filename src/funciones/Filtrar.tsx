@@ -1,18 +1,18 @@
 import Swal from "sweetalert2";
-import getLocalItems from "./GetLocalItems";
 
-const filtrar = async () => {
-  const listado = getLocalItems();
+const filtrar = async (categorias: any) => {
   const { value: categoria } = await Swal.fire({
     title: "Filtar",
     input: "select",
     inputOptions: {
       Super: "Super",
       Otros: "Otros",
-      Tren: "Tren",
+      Metro: "Metro",
       Bondi: "Bondi",
       Bar: "Bar",
       Boludeces: "Boludeces",
+      Café: "Café",
+      Ropa: "Ropa"
     },
     inputPlaceholder: "Categorias",
     showDenyButton: true,
@@ -20,15 +20,12 @@ const filtrar = async () => {
   });
 
   if (categoria) {
-    console.log(categoria);
     let suma = 0;
-    const nuevoArreglo = listado.filter((i: any) => i.categoria === categoria);
+    const nuevoArreglo = categorias.filter((i: any) => i.categoria === categoria);
     nuevoArreglo.map((i: any) => {
-      suma = suma + i.gasto;
+      suma = suma + i.monto;
     });
     Swal.fire("Subtotal: " + suma.toString());
-    //   console.log(nuevoArreglo);
-    //   setListado(nuevoArreglo);
   }
 };
 

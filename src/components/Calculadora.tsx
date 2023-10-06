@@ -10,6 +10,7 @@ import {
   TextField,
   styled,
 } from "@mui/material";
+import CircularProgress from '@mui/material/CircularProgress';
 import { ChangeEvent } from "react";
 import Swal from "sweetalert2";
 import { Box } from "@mui/system";
@@ -17,21 +18,11 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import getLocalItems from "../funciones/GetLocalItems";
 import sumar from "../funciones/Sumar";
 import filtrar from "../funciones/Filtrar";
-import categorias from "../Categorias";
-import { useQuery, gql, useMutation } from "@apollo/client";
+import categorias from "../utils/Categorias";
+import { useQuery, useMutation } from "@apollo/client";
 import { ADD_GASTO, DELETE_GASTO } from "../graphql/Mutaciones";
+import { QUERY } from "../graphql/Query";
 
-const query = gql`
-  query Gastos {
-    gastos {
-      id
-      monto
-      categoria
-      estado
-      fecha
-    }
-  }
-`;
 
 const obtenerFecha = (): string => {
   const today = new Date();
@@ -53,9 +44,7 @@ const Item = styled(Paper)(({ theme }: any) => ({
 }));
 
 export default function Calculadora() {
-  //let suma: number = 0;
-
-  const { data, loading, error } = useQuery(query);
+  const { data, loading, error } = useQuery(QUERY);
   const [mutate] = useMutation(ADD_GASTO);
   const [deleteGasto] = useMutation(DELETE_GASTO);
 
@@ -79,15 +68,12 @@ export default function Calculadora() {
       renderCell: (params) => {
         const onClick = async () => {
           const id = params.api.getCellValue(params.id, "id");
-          //const listado = JSON.parse(localStorage.getItem("gastos") ?? "");
 
           const response = await deleteGasto({
             variables: {
               removeGastoId: id,
             },
           });
-
-          // setListado((oldList: any[]) => [...oldList, response.data]);
 
           const nuevoArrelgo = listado.filter((i: any) => i.id !== response.data.removeGasto.id);
           console.log(nuevoArrelgo);
@@ -113,7 +99,6 @@ export default function Calculadora() {
   };
 
   useEffect(() => {
-    // localStorage.setItem("gastos", JSON.stringify(listado));
     const suma = sumar(listado);
     setTotal(suma);
   }, [listado]);
@@ -234,7 +219,7 @@ export default function Calculadora() {
         variant="outlined"
         size="small"
         style={{ marginLeft: "5px" }}
-        onClick={filtrar}
+        onClick={() => filtrar(listado)}
       >
         Filtrar
       </Button>
@@ -257,7 +242,7 @@ export default function Calculadora() {
         }}
       >
         {loading ? (
-          ""
+          <CircularProgress />
         ) : (
           <DataGrid
             rows={listado}

@@ -12,7 +12,7 @@ import { Form } from "react-bootstrap";
 import sumar from "../funciones/Sumar";
 import { Label } from "@mui/icons-material";
 import meses from "../Meses";
-import categorias from "../Categorias";
+import categorias from "../utils/Categorias";
 
 export default function CalculoReporte() {
   const [mes, setMes] = useState<string>("");
