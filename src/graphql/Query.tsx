@@ -22,3 +22,20 @@ export const QUERY = gql`
     }
   }
 `;
+
+export const GASTOS_CATEGORIA_MES = gql`
+  query GastosPorCategoriaYMes {
+    gastosPorCategoriaYMes {
+      id
+      mes
+      super
+      bondi
+      metro
+      bar
+      boludeces
+      ropa
+      otros
+      cafe
+      total
+    }
+}`
