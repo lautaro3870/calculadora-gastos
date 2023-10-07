@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -9,7 +9,14 @@ import {
   Legend,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
-import getLocalItems from "../funciones/GetLocalItems";
+import { useQuery } from "@apollo/client";
+import {
+  GASTOS_CATEGORIA_MES,
+  GASTOS_CATEGORIA_MES_REPORTE,
+} from "../graphql/Query";
+import CircularProgress from "@mui/material/CircularProgress";
+import { MenuItem, Select, SelectChangeEvent } from "@mui/material";
+import meses from "../Meses";
 
 ChartJS.register(
   CategoryScale,
@@ -21,35 +28,27 @@ ChartJS.register(
 );
 
 export default function Grafico() {
-  const [listado, setListado] = useState(getLocalItems());
+  // const [listado, setListado] = useState(getLocalItems());
   const [reporte, setReporte] = useState<number[] | null>([]);
+  const [mes, setMes] = useState<string>("");
 
-  const obtenerGrafico = () => {
-    let nuevoListado = [];
-    const nuevo = listado.reduce((acc: any, obj: any) => {
-      var key = obj.categoria;
-      if (!acc[key]) {
-        acc[key] = [];
-      }
-      acc[key].push(obj);
-      return acc;
-    }, {});
+  const { data, loading, error } = useQuery(GASTOS_CATEGORIA_MES_REPORTE, {
+    fetchPolicy: "no-cache",
+  });
 
-    for (const key in nuevo) {
-      const objetos = nuevo[key];
-
-      let suma = 0;
-      for (const objeto of objetos) {
-        suma = suma + objeto.gasto;
-      }
-
-      nuevoListado.push(suma);
-    }
-    setReporte(nuevoListado);
-    console.log(nuevoListado)
-  };
+  const labels = [
+    "super",
+    "bondi",
+    "metro",
+    "bar",
+    "boludeces",
+    "ropa",
+    "otros",
+    "cafe",
+  ];
 
   const options = {
+    labels,
     responsive: true,
     plugins: {
       legend: {
@@ -62,11 +61,13 @@ export default function Grafico() {
     },
   };
 
+  const handleChange = (e: SelectChangeEvent) => {
+    const gasto = data.gastosPorCategoriaYMes.find((objeto: any) => objeto.mes === e.target.value.toString())
+    setReporte(gasto)
+    setMes(e.target.value)
+  }
 
-  const labels = ["Boludeces", "Bondi", "Super", "Bar", "Otros"];
-
-  const data = {
-    labels,
+  const gastos = {
     datasets: [
       {
         label: "Gastos",
@@ -77,14 +78,27 @@ export default function Grafico() {
   };
 
   useEffect(() => {
-    console.log(listado);
-    
-    obtenerGrafico()
-  }, []);
+    setReporte(data === undefined ? [] : data.gastosPorCategoriaYMes);
+  }, [data, loading, error]);
 
   return (
     <div>
-      <Bar options={options} data={data} />
+      <br></br>
+      {loading ? (
+        <CircularProgress />
+      ) : (
+        <div>
+          <Select label="Categorias" size="small" value={mes} onChange={handleChange}>
+            {meses.map((mes, i) => (
+              <MenuItem selected key={i} value={mes.id}>
+                {mes.mes}
+              </MenuItem>
+            ))}
+          </Select>
+
+          <Bar options={options} data={gastos} />
+        </div>
+      )}
     </div>
   );
 }

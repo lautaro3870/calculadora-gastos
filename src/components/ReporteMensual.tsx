@@ -1,7 +1,6 @@
 import { Box, Stack } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useState, useEffect } from "react";
-import getLocalItems from "../funciones/GetLocalItems";
 import { useQuery } from "@apollo/client";
 import { GASTOS_CATEGORIA_MES } from "../graphql/Query";
 import CircularProgress from '@mui/material/CircularProgress';

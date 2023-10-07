@@ -39,3 +39,18 @@ export const GASTOS_CATEGORIA_MES = gql`
       total
     }
 }`
+
+export const GASTOS_CATEGORIA_MES_REPORTE = gql`
+  query GastosPorCategoriaYMes {
+    gastosPorCategoriaYMes {
+      mes
+      super
+      bondi
+      metro
+      bar
+      boludeces
+      ropa
+      otros
+      cafe
+    }
+}`
