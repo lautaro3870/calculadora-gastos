@@ -160,20 +160,6 @@ export default function GraficoLinea() {
         text: "Gastos por Día",
       },
     },
-    // scales: {
-    //   x: {
-    //     type: "time",
-    //     time: {
-    //       unit: "day",
-    //     },
-    //     ticks: {
-    //       source: "labels",
-    //     },
-    //   },
-    //   y: {
-    //     beginAtZero: true,
-    //   },
-    // },
   };
 
   function convertirFecha(fecha: any) {

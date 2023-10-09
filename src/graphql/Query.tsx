@@ -54,3 +54,9 @@ export const GASTOS_CATEGORIA_MES_REPORTE = gql`
       cafe
     }
 }`
+
+export const REMOVE_ALL = gql`
+  query Query {
+    removeAll
+  }
+`;

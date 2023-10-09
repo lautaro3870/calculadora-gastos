@@ -10,7 +10,7 @@ import {
   TextField,
   styled,
 } from "@mui/material";
-import CircularProgress from '@mui/material/CircularProgress';
+import CircularProgress from "@mui/material/CircularProgress";
 import { ChangeEvent } from "react";
 import Swal from "sweetalert2";
 import { Box } from "@mui/system";
@@ -21,8 +21,7 @@ import filtrar from "../funciones/Filtrar";
 import categorias from "../utils/Categorias";
 import { useQuery, useMutation } from "@apollo/client";
 import { ADD_GASTO, DELETE_GASTO } from "../graphql/Mutaciones";
-import { QUERY } from "../graphql/Query";
-
+import { QUERY, REMOVE_ALL } from "../graphql/Query";
 
 const obtenerFecha = (): string => {
   const today = new Date();
@@ -44,7 +43,8 @@ const Item = styled(Paper)(({ theme }: any) => ({
 }));
 
 export default function Calculadora() {
-  const { data, loading, error } = useQuery(QUERY);
+  const { data, loading, error, refetch } = useQuery(QUERY);
+
   const [mutate] = useMutation(ADD_GASTO);
   const [deleteGasto] = useMutation(DELETE_GASTO);
 
@@ -75,7 +75,9 @@ export default function Calculadora() {
             },
           });
 
-          const nuevoArrelgo = listado.filter((i: any) => i.id !== response.data.removeGasto.id);
+          const nuevoArrelgo = listado.filter(
+            (i: any) => i.id !== response.data.removeGasto.id
+          );
           console.log(nuevoArrelgo);
           setListado(nuevoArrelgo);
         };
@@ -202,12 +204,11 @@ export default function Calculadora() {
             showConfirmButton: false,
             showCancelButton: true,
             denyButtonText: `Limpiar`,
-          }).then((result) => {
+          }).then(async (result) => {
             /* Read more about isConfirmed, isDenied below */
             if (result.isDenied) {
-              localStorage.setItem("gastos", JSON.stringify([]));
-              setListado([]);
-              setTotal(0);
+              await fetch("https://melbourne-sea-lion-rrtx.2.sg-1.fl0.io/gastos")
+              refetch()
               Swal.fire("Lista limpiada", "", "info");
             }
           });
