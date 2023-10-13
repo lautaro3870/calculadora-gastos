@@ -3,7 +3,7 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useState, useEffect } from "react";
 import { useQuery } from "@apollo/client";
 import { GASTOS_CATEGORIA_MES } from "../graphql/Query";
-import CircularProgress from '@mui/material/CircularProgress';
+import CircularProgress from "@mui/material/CircularProgress";
 
 export default function ReporteMensual() {
   const { data, loading, error } = useQuery(GASTOS_CATEGORIA_MES);
@@ -25,11 +25,15 @@ export default function ReporteMensual() {
       "Septiembre",
       "Octubre",
       "Noviembre",
-      "Diciembre"
+      "Diciembre",
     ];
-  
+
     return months[monthNumber - 1];
-  }
+  };
+
+  const rendondear = (valor: number) => {
+    return valor.toFixed(2);
+  };
 
   useEffect(() => {
     setDatos(data === undefined ? [] : data.gastosPorCategoriaYMes);
@@ -37,16 +41,66 @@ export default function ReporteMensual() {
   }, [data, loading, error]);
 
   const columns: GridColDef[] = [
-    { field: "super", headerName: "Super", width: 140 },
-    { field: "bar", headerName: "Bar", width: 140 },
-    { field: "metro", headerName: "Metro", width: 140 },
-    { field: "boludeces", headerName: "Boludeces", width: 140 },
-    { field: "bondi", headerName: "Bondi", width: 120 },
-    { field: "ropa", headerName: "Ropa", width: 120 },
-    { field: "cafe", headerName: "Cafe", width: 120 },
-    { field: "otros", headerName: "Otros", width: 120 },
-    { field: "mes", headerName: "Mes", width: 150, valueGetter: (param) => getMonthName(param.row.mes) },
-    { field: "total", headerName: "Total", width: 150 },
+    {
+      field: "super",
+      headerName: "Super",
+      width: 140,
+      valueGetter: (param) => rendondear(param.row.super),
+    },
+    {
+      field: "bar",
+      headerName: "Bar",
+      width: 140,
+      valueGetter: (param) => rendondear(param.row.bar),
+    },
+    {
+      field: "metro",
+      headerName: "Metro",
+      width: 140,
+      valueGetter: (param) => rendondear(param.row.metro),
+    },
+    {
+      field: "boludeces",
+      headerName: "Boludeces",
+      width: 140,
+      valueGetter: (param) => rendondear(param.row.boludeces),
+    },
+    {
+      field: "bondi",
+      headerName: "Bondi",
+      width: 120,
+      valueGetter: (param) => rendondear(param.row.bondi),
+    },
+    {
+      field: "ropa",
+      headerName: "Ropa",
+      width: 120,
+      valueGetter: (param) => rendondear(param.row.ropa),
+    },
+    {
+      field: "cafe",
+      headerName: "Cafe",
+      width: 120,
+      valueGetter: (param) => rendondear(param.row.cafe),
+    },
+    {
+      field: "otros",
+      headerName: "Otros",
+      width: 120,
+      valueGetter: (param) => rendondear(param.row.otros),
+    },
+    {
+      field: "mes",
+      headerName: "Mes",
+      width: 150,
+      valueGetter: (param) => getMonthName(param.row.mes),
+    },
+    {
+      field: "total",
+      headerName: "Total",
+      width: 150,
+      valueGetter: (param) => rendondear(param.row.total),
+    },
   ];
 
   return (
@@ -60,24 +114,24 @@ export default function ReporteMensual() {
           justifyContent: "center",
           alignItems: "center",
         }}
-      >
-      </Stack>
+      ></Stack>
       <Box>
         {loading ? (
           <CircularProgress />
         ) : (
           <div>
-            <br /><br />
+            <br />
+            <br />
             <DataGrid
-            rows={datos}
-            columns={columns}
-            initialState={{
-              pagination: {
-                paginationModel: { page: 0, pageSize: 10 },
-              },
-            }}
-            pageSizeOptions={[5, 10]}
-          />
+              rows={datos}
+              columns={columns}
+              initialState={{
+                pagination: {
+                  paginationModel: { page: 0, pageSize: 10 },
+                },
+              }}
+              pageSizeOptions={[5, 10]}
+            />
           </div>
         )}
       </Box>
