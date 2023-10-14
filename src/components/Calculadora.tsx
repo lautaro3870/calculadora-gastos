@@ -21,16 +21,14 @@ import filtrar from "../funciones/Filtrar";
 import categorias from "../utils/Categorias";
 import { useQuery, useMutation } from "@apollo/client";
 import { ADD_GASTO, DELETE_GASTO } from "../graphql/Mutaciones";
-import { QUERY, REMOVE_ALL } from "../graphql/Query";
+import { QUERY } from "../graphql/Query";
 
-const obtenerFecha = (): string => {
-  const today = new Date();
-  const day = String(today.getDate()).padStart(2, "0");
-  const month = String(today.getMonth() + 1).padStart(2, "0");
-  const year = today.getFullYear();
-
+const formatearFecha = (fecha: string): string => {
+  const valorFecha = new Date(fecha);
+  const day = String(valorFecha.getDate()).padStart(2, "0");
+  const month = String(valorFecha.getMonth() + 1).padStart(2, "0");
+  const year = valorFecha.getFullYear();
   const formattedDate = `${day}/${month}/${year}`;
-  console.log(formattedDate);
   return formattedDate;
 };
 
@@ -61,7 +59,7 @@ export default function Calculadora() {
   const columns: GridColDef[] = [
     { field: "monto", headerName: "Gasto", width: 120 },
     { field: "categoria", headerName: "Categoria", width: 140 },
-    { field: "fecha", headerName: "Fecha", width: 150 },
+    { field: "fecha", headerName: "Fecha", width: 150, valueGetter: (param) => formatearFecha(param.row.fecha) },
     {
       field: "actions",
       headerName: "Actions",

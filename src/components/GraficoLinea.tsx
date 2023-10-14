@@ -14,6 +14,8 @@ import {
 import "chartjs-adapter-date-fns";
 import { Line } from "react-chartjs-2";
 import getLocalItems from "../funciones/GetLocalItems";
+import { useQuery } from "@apollo/client";
+import { GASTOS_DIARIOS } from "../graphql/Query";
 
 ChartJS.register(
   TimeScale,
@@ -26,8 +28,16 @@ ChartJS.register(
   Legend
 );
 export default function GraficoLinea() {
+  const { data, loading, error } = useQuery(GASTOS_DIARIOS);
+
   const [listado, setListado] = useState(getLocalItems());
-  const [datos, setDatos] = useState<{ fecha: any; valor: any }[]>([]);
+  const [datos, setDatos] = useState<any[]>(data === undefined ? [] : data);
+
+
+  useEffect(() => {
+    setDatos(data === undefined ? [] : data.gastosDiarios)
+  }, [data, loading, error])
+
 
   const [chartData, setChartData] = useState<ChartData<"line", any, string>>({
     // Set initial data here or provide data based on your requirements
@@ -85,8 +95,8 @@ export default function GraficoLinea() {
     // Genera datos de ejemplo (puedes reemplazarlo con tus propios datos)
     // const data = datesOfMonth.map((date) => Math.floor(Math.random() * 100));
 
-    const labels = nuevoListado.map((item) => item.fecha);
-    const values = nuevoListado.map((item) => item.valor);
+    const labels = datos.map((item) => item.fecha);
+    const values = datos.map((item) => item.valor);
 
     // Crea el objeto de datos para el gráfico
     const chartData = {

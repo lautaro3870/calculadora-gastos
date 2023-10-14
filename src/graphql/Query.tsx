@@ -60,3 +60,12 @@ export const REMOVE_ALL = gql`
     removeAll
   }
 `;
+
+export const GASTOS_DIARIOS = gql`
+  query GastosDiarios {
+    gastosDiarios {
+      suma
+      fecha
+      mes
+    }
+}`

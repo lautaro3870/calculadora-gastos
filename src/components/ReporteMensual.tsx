@@ -37,7 +37,6 @@ export default function ReporteMensual() {
 
   useEffect(() => {
     setDatos(data === undefined ? [] : data.gastosPorCategoriaYMes);
-    console.log(datos);
   }, [data, loading, error]);
 
   const columns: GridColDef[] = [
