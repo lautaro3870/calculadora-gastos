@@ -105,6 +105,7 @@ export default function Calculadora() {
 
   useEffect(() => {
     setListado(data == undefined ? [] : data.gastos);
+    localStorage.setItem("gastos", JSON.stringify(data == undefined ? [] : data.gastos));
   }, [loading, error, data]);
 
   const calcular = async () => {
