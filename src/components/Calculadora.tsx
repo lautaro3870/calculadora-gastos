@@ -40,13 +40,17 @@ const Item = styled(Paper)(({ theme }: any) => ({
   color: theme.palette.text.secondary,
 }));
 
+const totalGasto = (localStorage.getItem("totalAGastar"));
+
 export default function Calculadora() {
   const { data, loading, error, refetch } = useQuery(QUERY);
 
   const [mutate] = useMutation(ADD_GASTO);
   const [deleteGasto] = useMutation(DELETE_GASTO);
 
-  const totalAGastar = 400;
+  const [totalAGastar, setTotalAGastar] = useState(parseInt(totalGasto ?? ""));
+  const [editing, setIsEditing] = useState(false);
+
   const [total, setTotal] = useState<number>(0);
 
   const [gasto, setGasto] = useState<string>("");
@@ -59,7 +63,12 @@ export default function Calculadora() {
   const columns: GridColDef[] = [
     { field: "monto", headerName: "Gasto", width: 120 },
     { field: "categoria", headerName: "Categoria", width: 140 },
-    { field: "fecha", headerName: "Fecha", width: 150, valueGetter: (param) => formatearFecha(param.row.fecha) },
+    {
+      field: "fecha",
+      headerName: "Fecha",
+      width: 150,
+      valueGetter: (param) => formatearFecha(param.row.fecha),
+    },
     {
       field: "actions",
       headerName: "Actions",
@@ -105,7 +114,10 @@ export default function Calculadora() {
 
   useEffect(() => {
     setListado(data == undefined ? [] : data.gastos);
-    localStorage.setItem("gastos", JSON.stringify(data == undefined ? [] : data.gastos));
+    localStorage.setItem(
+      "gastos",
+      JSON.stringify(data == undefined ? [] : data.gastos)
+    );
   }, [loading, error, data]);
 
   const calcular = async () => {
@@ -136,6 +148,20 @@ export default function Calculadora() {
       sort: "desc",
     },
   ]);
+
+  const handleChangeTotal = (event: ChangeEvent<HTMLInputElement>) => {
+    const valor = event.target.value.toString()
+    setTotalAGastar(parseInt(valor ?? ""));
+    localStorage.setItem("totalAGastar", valor);
+  };
+
+  const changeEditing = () => {
+    setIsEditing(true);
+  };
+
+  const handleChangeToFalse = () => {
+    setIsEditing(false);
+  };
 
   return (
     <div>
@@ -206,8 +232,10 @@ export default function Calculadora() {
           }).then(async (result) => {
             /* Read more about isConfirmed, isDenied below */
             if (result.isDenied) {
-              await fetch("https://melbourne-sea-lion-rrtx.2.sg-1.fl0.io/gastos")
-              refetch()
+              await fetch(
+                "https://melbourne-sea-lion-rrtx.2.sg-1.fl0.io/gastos"
+              );
+              refetch();
               Swal.fire("Lista limpiada", "", "info");
             }
           });
@@ -231,7 +259,16 @@ export default function Calculadora() {
         )}
       </label>
       <br />
-      <label>Total para gastar: {totalAGastar}</label>
+      {editing ? (
+        <TextField
+          value={totalAGastar}
+          onChange={handleChangeTotal}
+          onBlur={handleChangeToFalse}
+        />
+      ) : (
+        <label onClick={changeEditing}>Total para gastar: {totalAGastar}</label>
+      )}
+
       <br />
       <br />
       <Box
